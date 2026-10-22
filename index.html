@@ -91,37 +91,42 @@ button.primary{background:var(--site-primary);color:white;border-color:var(--sit
 <div class="footer">함께 읽고, 함께 자라기 · 시편 1–150편</div>
 </div>
 </div>
-<script>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 const weeks = [{"week": 1, "range": "시편 1~8편", "detail": "시작하는 시편들"}, {"week": 2, "range": "시편 9~18편", "detail": "시편 18편은 긴 편이에요"}, {"week": 3, "range": "시편 19~27편", "detail": "찬양과 신뢰의 시편"}, {"week": 4, "range": "시편 28~37편", "detail": "시편 37편은 긴 편이에요"}, {"week": 5, "range": "시편 38~44편", "detail": "시편 44편은 긴 편이에요"}, {"week": 6, "range": "시편 45~54편", "detail": "시편 45편 포함"}, {"week": 7, "range": "시편 55~63편", "detail": "기도와 탄식의 시편"}, {"week": 8, "range": "시편 64~72편", "detail": "시편 68~69편은 긴 편이에요"}, {"week": 9, "range": "시편 73~78편", "detail": "시편 78편은 매우 긴 편이에요"}, {"week": 10, "range": "시편 79~89편", "detail": "시편 89편은 긴 편이에요"}, {"week": 11, "range": "시편 90~101편", "detail": "시편 90편부터 새 구간"}, {"week": 12, "range": "시편 102~107편", "detail": "긴 시편을 고려해 적게 배정"}, {"week": 13, "range": "시편 108~118편", "detail": "시편 109편과 118편 포함"}, {"week": 14, "range": "시편 119편 1~60절", "detail": "시편 119편 첫 부분"}, {"week": 15, "range": "시편 119편 61~120절", "detail": "시편 119편 가운데 부분"}, {"week": 16, "range": "시편 119편 121~176절", "detail": "시편 119편 마지막 부분"}, {"week": 17, "range": "시편 120~134편", "detail": "짧은 순례자의 노래 모음"}, {"week": 18, "range": "시편 135~139편", "detail": "찬양과 신뢰의 시편"}, {"week": 19, "range": "시편 140~145편", "detail": "기도와 찬양"}, {"week": 20, "range": "시편 146~150편", "detail": "마지막 찬양시"}];
+const SUPABASE_URL = "https://oeapdrgwxmyiivfxzzhy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_TrRiyBg4UHwd_oxwFj8LLQ_9rJB0lBz";
+const isClientKey = SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_") || SUPABASE_PUBLISHABLE_KEY.startsWith("eyJ");
+const supabaseReady = SUPABASE_URL.startsWith("https://") && isClientKey;
+const supabase = supabaseReady ? createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
 const people = ["효윤","은경","주연"];
 const personIds = {"1":"효윤","2":"은경","3":"주연","hyoyun":"효윤","eunkyung":"은경","juyeon":"주연"};
 const pathPart = location.pathname.split("/").filter(Boolean).pop() || "1";
 const queryPerson = new URLSearchParams(location.search).get("person");
 let currentPersonName = personIds[queryPerson || pathPart] || "효윤";
 const personalLinks = [{name:"효윤",id:"hyoyun"},{name:"은경",id:"eunkyung"},{name:"주연",id:"juyeon"}];
-const key = "psalms20-preview-v1";
-let state = {};
-try { state = JSON.parse(localStorage.getItem(key) || "{}"); } catch(e) { state = {}; }
-people.forEach(p => { if (!state[p]) state[p] = {}; });
+let state = {"효윤":{},"은경":{},"주연":{}};
 const weekRoot = document.getElementById("weeks");
 const peopleRoot = document.getElementById("people");
-document.getElementById("pageTitle").textContent = currentPersonName + "의 시편 20주 챌린지";
-document.getElementById("myNameLabel").textContent = currentPersonName + "의 읽기 기록";
+const callout = document.querySelector(".callout");
+function setStatus(message) { callout.textContent = message; }
+function updateHeading() {
+ document.getElementById("pageTitle").textContent = currentPersonName + "의 시편 20주 챌린지";
+ document.getElementById("myNameLabel").textContent = currentPersonName + "의 읽기 기록";
+}
 function renderPersonalLinks() {
  document.getElementById("personalLinks").innerHTML = personalLinks.map(person => `<a href="#${person.id}" data-person="${person.name}" ${person.name === currentPersonName ? 'aria-current="page"' : ""}>${person.name}의 페이지</a>`).join("");
  document.getElementById("personalLinks").querySelectorAll("a[data-person]").forEach(link => link.addEventListener("click", e => {
   e.preventDefault();
   currentPersonName = link.dataset.person;
-  document.getElementById("pageTitle").textContent = currentPersonName + "의 시편 20주 챌린지";
-  document.getElementById("myNameLabel").textContent = currentPersonName + "의 읽기 기록";
+  updateHeading();
   render();
   renderPersonalLinks();
  }));
 }
-function save() { localStorage.setItem(key, JSON.stringify(state)); render(); }
-function doneCount(p) { return weeks.filter(w => state[p][w.week]).length; }
+function doneCount(p) { return weeks.filter(w => state[p][w.week] === true).length; }
 function renderPeople() {
- peopleRoot.innerHTML = people.map((p,i) => {
+ peopleRoot.innerHTML = people.map(p => {
   const count = doneCount(p), pct = Math.round(count / 20 * 100);
   return `<div class="person"><div class="avatar">${p.slice(0,1)}</div><div class="person-main"><div class="person-line"><strong>${p}</strong><span class="muted">${count}/20주 · ${pct}%</span></div><div class="track"><div class="fill" style="width:${pct}%"></div></div></div></div>`;
  }).join("");
@@ -129,17 +134,59 @@ function renderPeople() {
 function renderWeeks() {
  const p = currentPersonName;
  weekRoot.innerHTML = weeks.map(w => {
-  const checked = !!state[p][w.week];
+  const checked = state[p][w.week] === true;
   return `<article class="week ${checked ? "done" : ""}"><div class="week-num">${String(w.week).padStart(2,"0")}</div><div><h3>${w.range}</h3><div class="detail">${w.detail}</div></div><label class="check"><input type="checkbox" data-week="${w.week}" ${checked ? "checked" : ""}><span>완료</span></label></article>`;
  }).join("");
- weekRoot.querySelectorAll("input[data-week]").forEach(input => input.addEventListener("change", e => {
-  state[p][e.target.dataset.week] = e.target.checked;
-  save();
+ weekRoot.querySelectorAll("input[data-week]").forEach(input => input.addEventListener("change", async e => {
+  const weekNumber = Number(e.target.dataset.week);
+  const completed = e.target.checked;
+  state[p][weekNumber] = completed;
+  render();
+  if (!supabase) {
+   setStatus("Supabase 연결 정보가 아직 입력되지 않았어요. index.html에 프로젝트 URL과 Publishable key를 입력해 주세요.");
+   return;
+  }
+  e.target.disabled = true;
+  const { error } = await supabase.from("reading_progress").upsert({
+   person_id: personalLinks.find(person => person.name === p).id,
+   week_number: weekNumber,
+   completed,
+   updated_at: new Date().toISOString()
+  }, { onConflict: "person_id,week_number" });
+  if (error) {
+   state[p][weekNumber] = !completed;
+   render();
+   setStatus("저장하지 못했어요. Supabase 테이블과 접근 권한 설정을 확인해 주세요.");
+   console.error(error);
+  } else {
+   setStatus("읽기 기록이 온라인에 저장됐어요. 친구들과 같은 진행 현황을 볼 수 있어요.");
+  }
  }));
 }
 function render() { renderPeople(); renderWeeks(); }
-renderPersonalLinks();
-render();
+async function loadProgress() {
+ updateHeading();
+ renderPersonalLinks();
+ render();
+ if (!supabase) {
+  setStatus("연결 준비 완료: 아래 코드의 Supabase URL과 Publishable key 부분을 실제 값으로 바꾸면 온라인 저장이 활성화돼요.");
+  return;
+ }
+ setStatus("공유된 읽기 기록을 불러오는 중이에요…");
+ const { data, error } = await supabase.from("reading_progress").select("person_id, week_number, completed");
+ if (error) {
+  setStatus("기록을 불러오지 못했어요. Supabase 테이블과 접근 권한 설정을 확인해 주세요.");
+  console.error(error);
+  return;
+ }
+ data.forEach(row => {
+  const personName = personIds[row.person_id];
+  if (personName && row.week_number >= 1 && row.week_number <= 20) state[personName][row.week_number] = row.completed;
+ });
+ render();
+ setStatus("공유된 읽기 기록을 불러왔어요. 체크하면 온라인에 저장돼요.");
+}
+loadProgress();
 </script>
 </body>
 </html>
