@@ -115,14 +115,7 @@ function updateHeading() {
  document.getElementById("myNameLabel").textContent = currentPersonName + "의 읽기 기록";
 }
 function renderPersonalLinks() {
- document.getElementById("personalLinks").innerHTML = personalLinks.map(person => `<a href="#${person.id}" data-person="${person.name}" ${person.name === currentPersonName ? 'aria-current="page"' : ""}>${person.name}의 페이지</a>`).join("");
- document.getElementById("personalLinks").querySelectorAll("a[data-person]").forEach(link => link.addEventListener("click", e => {
-  e.preventDefault();
-  currentPersonName = link.dataset.person;
-  updateHeading();
-  render();
-  renderPersonalLinks();
- }));
+ document.getElementById("personalLinks").innerHTML = personalLinks.map(person => `<a href="?person=${person.id}" ${person.name === currentPersonName ? 'aria-current="page"' : ""}>${person.name}의 페이지</a>`).join("");
 }
 function doneCount(p) { return weeks.filter(w => state[p][w.week] === true).length; }
 function renderPeople() {
