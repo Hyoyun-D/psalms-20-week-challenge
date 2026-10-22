@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>시편 20주 함께 읽기</title>
+<style>
+:root {
+ --site-primary:#2F6B57;
+ --site-secondary:#E7EFE8;
+ --site-background:#F7F6F0;
+ --site-on-primary:#FFFFFF;
+ --site-on-secondary:#243B31;
+ --site-on-background:#26352E;
+ --site-font-body: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+ --site-font-heading: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+ --site-heading-scale:1;
+ --site-spacing-scale:1;
+ --site-radius-scale:1;
+ --site-decoration-opacity:1;
+ color-scheme:light dark;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--site-font-body);background:var(--site-background);color:var(--site-on-background);line-height:1.5}
+#app{min-height:100vh;background-color:light-dark(var(--site-background),#17231E);color:light-dark(var(--site-on-background),#EDF3EF);padding:28px 16px 48px}
+.wrap{max-width:900px;margin:0 auto}
+.hero{background:var(--site-primary);color:var(--site-on-primary);border-radius:calc(24px * var(--site-radius-scale));padding:28px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:240px;height:240px;border:1px solid #ffffff40;border-radius:50%;right:-80px;top:-120px;box-shadow:0 0 0 28px #ffffff10,0 0 0 58px #ffffff08;pointer-events:none;opacity:var(--site-decoration-opacity)}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;opacity:.85}
+h1{font-size:calc(32px * var(--site-heading-scale));line-height:1.2;margin:8px 0 10px;font-family:var(--site-font-heading)}
+.hero p{margin:0;max-width:580px;color:#E8F1EB}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.pill{background:#ffffff20;border:1px solid #ffffff35;border-radius:999px;padding:6px 10px;font-size:12px}
+.personal-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.personal-links a{display:inline-block;color:inherit;text-decoration:none;border:1px solid light-dark(#D8E0D8,#415247);background:light-dark(#FFFFFF,#202D27);padding:8px 12px;border-radius:10px;font-size:13px;font-weight:700}
+.personal-links a[aria-current="page"]{background:var(--site-secondary);color:var(--site-on-secondary);border-color:var(--site-primary)}
+.layout{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
+.panel{background:light-dark(#FFFFFF,#202D27);border:1px solid light-dark(#E0E5DF,#34453B);border-radius:calc(18px * var(--site-radius-scale));padding:18px}
+.panel h2{font-size:17px;margin:0 0 14px}
+.persons{display:grid;gap:14px}
+.person{display:flex;gap:10px;align-items:center}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--site-secondary);color:var(--site-on-secondary);font-weight:800;flex-shrink:0}
+.person-main{flex:1;min-width:0}
+.person-line{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}
+.muted{color:light-dark(#6B776F,#A7B4AB);font-size:12px}
+.track{height:7px;background:light-dark(#E9EDE8,#39473F);border-radius:99px;overflow:hidden}
+.fill{height:100%;background:#4B9878;border-radius:99px;transition:width .2s}
+.callout{font-size:12px;padding:12px;border-radius:12px;background:light-dark(#F5F7F2,#26382E);margin-top:16px;color:light-dark(#526157,#C2D0C5)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:22px 0 12px}
+.toolbar h2{margin:0;font-size:20px}
+.select-wrap{display:flex;gap:8px;align-items:center;font-size:13px}
+select,button{font:inherit;border-radius:10px;border:1px solid light-dark(#D8E0D8,#415247);padding:9px 12px;background:light-dark(#FFFFFF,#202D27);color:inherit}
+button{cursor:pointer}
+button.primary{background:var(--site-primary);color:white;border-color:var(--site-primary);font-weight:700}
+.weeks{display:grid;gap:10px}
+.week{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;background:light-dark(#FFFFFF,#202D27);border:1px solid light-dark(#E0E5DF,#34453B);border-radius:15px;padding:14px;transition:border-color .2s}
+.week.done{border-color:#6CA98D;background:light-dark(#F3F8F4,#22352B)}
+.week-num{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--site-secondary);color:var(--site-on-secondary);font-weight:800;font-size:13px}
+.week.done .week-num{background:#D6EBDD;color:#285A42}
+.week h3{margin:0;font-size:15px}
+.week .detail{font-size:12px;color:light-dark(#78837A,#A7B4AB);margin-top:3px}
+.check{display:flex;align-items:center;gap:8px;font-size:12px;white-space:nowrap;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--site-primary)}
+.notice{font-size:12px;color:light-dark(#7B5B26,#E8C887);background:light-dark(#FFF6DF,#3A3020);padding:12px 14px;border-radius:12px;margin:16px 0}
+.footer{text-align:center;font-size:12px;color:light-dark(#78837A,#A7B4AB);margin-top:22px}
+@media(max-width:700px){#app{padding:16px 12px 36px}.hero{padding:23px 20px}h1{font-size:27px}.layout{grid-template-columns:1fr}.week{grid-template-columns:38px 1fr auto;gap:9px;padding:12px 10px}.week .detail{max-width:240px}.check span{display:none}}
+</style>
+</head>
+<body>
+<div id="app" data-sites-preview-theme>
+<div class="wrap">
+<header class="hero">
+ <div class="eyebrow">PSALMS · READ TOGETHER</div>
+ <h1 id="pageTitle">효윤이의 시편 20주 챌린지</h1>
+ <p>천천히, 꾸준히. 이번 주 읽기를 마치면 완료를 체크해요.</p>
+ <div class="pills"><span class="pill">참여자 3명</span><span class="pill">시편 1~150편</span><span class="pill">20주 완독 계획</span></div>
+</header>
+<nav id="personalLinks" class="personal-links" aria-label="개인별 읽기 페이지"></nav>
+<div class="layout">
+ <section class="panel">
+  <h2>우리의 진행 현황</h2>
+  <div id="people" class="persons"></div>
+  <div class="callout">각자의 페이지에서 읽기를 체크하고, 서로의 진행 현황을 확인해요.</div>
+ </section>
+</div>
+<div class="toolbar">
+ <h2>20주 읽기표</h2>
+ <div class="select-wrap"><span id="myNameLabel">효윤의 읽기 기록</span></div>
+</div>
+<div id="weeks" class="weeks"></div>
+<div class="footer">함께 읽고, 함께 자라기 · 시편 1–150편</div>
+</div>
+</div>
+<script>
+const weeks = [{"week": 1, "range": "시편 1~8편", "detail": "시작하는 시편들"}, {"week": 2, "range": "시편 9~18편", "detail": "시편 18편은 긴 편이에요"}, {"week": 3, "range": "시편 19~27편", "detail": "찬양과 신뢰의 시편"}, {"week": 4, "range": "시편 28~37편", "detail": "시편 37편은 긴 편이에요"}, {"week": 5, "range": "시편 38~44편", "detail": "시편 44편은 긴 편이에요"}, {"week": 6, "range": "시편 45~54편", "detail": "시편 45편 포함"}, {"week": 7, "range": "시편 55~63편", "detail": "기도와 탄식의 시편"}, {"week": 8, "range": "시편 64~72편", "detail": "시편 68~69편은 긴 편이에요"}, {"week": 9, "range": "시편 73~78편", "detail": "시편 78편은 매우 긴 편이에요"}, {"week": 10, "range": "시편 79~89편", "detail": "시편 89편은 긴 편이에요"}, {"week": 11, "range": "시편 90~101편", "detail": "시편 90편부터 새 구간"}, {"week": 12, "range": "시편 102~107편", "detail": "긴 시편을 고려해 적게 배정"}, {"week": 13, "range": "시편 108~118편", "detail": "시편 109편과 118편 포함"}, {"week": 14, "range": "시편 119편 1~60절", "detail": "시편 119편 첫 부분"}, {"week": 15, "range": "시편 119편 61~120절", "detail": "시편 119편 가운데 부분"}, {"week": 16, "range": "시편 119편 121~176절", "detail": "시편 119편 마지막 부분"}, {"week": 17, "range": "시편 120~134편", "detail": "짧은 순례자의 노래 모음"}, {"week": 18, "range": "시편 135~139편", "detail": "찬양과 신뢰의 시편"}, {"week": 19, "range": "시편 140~145편", "detail": "기도와 찬양"}, {"week": 20, "range": "시편 146~150편", "detail": "마지막 찬양시"}];
+const people = ["효윤","은경","주연"];
+const personIds = {"1":"효윤","2":"은경","3":"주연","hyoyun":"효윤","eunkyung":"은경","juyeon":"주연"};
+const pathPart = location.pathname.split("/").filter(Boolean).pop() || "1";
+const queryPerson = new URLSearchParams(location.search).get("person");
+let currentPersonName = personIds[queryPerson || pathPart] || "효윤";
+const personalLinks = [{name:"효윤",id:"hyoyun"},{name:"은경",id:"eunkyung"},{name:"주연",id:"juyeon"}];
+const key = "psalms20-preview-v1";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(key) || "{}"); } catch(e) { state = {}; }
+people.forEach(p => { if (!state[p]) state[p] = {}; });
+const weekRoot = document.getElementById("weeks");
+const peopleRoot = document.getElementById("people");
+document.getElementById("pageTitle").textContent = currentPersonName + "의 시편 20주 챌린지";
+document.getElementById("myNameLabel").textContent = currentPersonName + "의 읽기 기록";
+function renderPersonalLinks() {
+ document.getElementById("personalLinks").innerHTML = personalLinks.map(person => `<a href="#${person.id}" data-person="${person.name}" ${person.name === currentPersonName ? 'aria-current="page"' : ""}>${person.name}의 페이지</a>`).join("");
+ document.getElementById("personalLinks").querySelectorAll("a[data-person]").forEach(link => link.addEventListener("click", e => {
+  e.preventDefault();
+  currentPersonName = link.dataset.person;
+  document.getElementById("pageTitle").textContent = currentPersonName + "의 시편 20주 챌린지";
+  document.getElementById("myNameLabel").textContent = currentPersonName + "의 읽기 기록";
+  render();
+  renderPersonalLinks();
+ }));
+}
+function save() { localStorage.setItem(key, JSON.stringify(state)); render(); }
+function doneCount(p) { return weeks.filter(w => state[p][w.week]).length; }
+function renderPeople() {
+ peopleRoot.innerHTML = people.map((p,i) => {
+  const count = doneCount(p), pct = Math.round(count / 20 * 100);
+  return `<div class="person"><div class="avatar">${p.slice(0,1)}</div><div class="person-main"><div class="person-line"><strong>${p}</strong><span class="muted">${count}/20주 · ${pct}%</span></div><div class="track"><div class="fill" style="width:${pct}%"></div></div></div></div>`;
+ }).join("");
+}
+function renderWeeks() {
+ const p = currentPersonName;
+ weekRoot.innerHTML = weeks.map(w => {
+  const checked = !!state[p][w.week];
+  return `<article class="week ${checked ? "done" : ""}"><div class="week-num">${String(w.week).padStart(2,"0")}</div><div><h3>${w.range}</h3><div class="detail">${w.detail}</div></div><label class="check"><input type="checkbox" data-week="${w.week}" ${checked ? "checked" : ""}><span>완료</span></label></article>`;
+ }).join("");
+ weekRoot.querySelectorAll("input[data-week]").forEach(input => input.addEventListener("change", e => {
+  state[p][e.target.dataset.week] = e.target.checked;
+  save();
+ }));
+}
+function render() { renderPeople(); renderWeeks(); }
+renderPersonalLinks();
+render();
+</script>
+</body>
+</html>
