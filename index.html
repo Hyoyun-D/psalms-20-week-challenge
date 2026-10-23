@@ -135,13 +135,28 @@ function renderWeeks() {
   const completed = e.target.checked;
   state[p][weekNumber] = completed;
   render();
-  if (completed) {
-   const nextWeek = weeks.find(w => state[p][w.week] !== true);
-   requestAnimationFrame(() => {
-    const target = nextWeek ? weekRoot.querySelector(`[data-week="${nextWeek.week}"]`)?.closest(".week") : null;
-    if (target) target.scrollIntoView({block:"start",behavior:"smooth"});
-   });
-  }
+if (completed) {
+  const nextWeek = weeks.find(w => state[p][w.week] !== true);
+
+  requestAnimationFrame(() => {
+    const target = nextWeek
+      ? weekRoot.querySelector(`[data-week="${nextWeek.week}"]`)?.closest(".week")
+      : null;
+
+    if (target) {
+      const previousWeek = target.previousElementSibling;
+
+      if (previousWeek) {
+        weekRoot.scrollTo({
+          top: previousWeek.offsetTop - weekRoot.offsetTop,
+          behavior: "smooth"
+        });
+      } else {
+        target.scrollIntoView({ block: "start", behavior: "smooth" });
+      }
+    }
+  });
+}
   if (!supabase) {
    setStatus("Supabase 연결 정보가 아직 입력되지 않았어요. index.html에 프로젝트 URL과 Publishable key를 입력해 주세요.");
    return;
