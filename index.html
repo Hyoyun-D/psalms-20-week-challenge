@@ -22,20 +22,20 @@
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:var(--site-font-body);background:var(--site-background);color:var(--site-on-background);line-height:1.5}
-#app{min-height:100vh;background-color:light-dark(var(--site-background),#17231E);color:light-dark(var(--site-on-background),#EDF3EF);padding:28px 16px 48px}
-.wrap{max-width:900px;margin:0 auto}
-.hero{background:var(--site-primary);color:var(--site-on-primary);border-radius:calc(24px * var(--site-radius-scale));padding:28px;position:relative;overflow:hidden}
+#app{min-height:0;height:100vh;height:100dvh;overflow:hidden;background-color:light-dark(var(--site-background),#17231E);color:light-dark(var(--site-on-background),#EDF3EF);padding:18px 16px 18px}
+.wrap{max-width:900px;width:100%;height:100%;margin:0 auto;display:flex;flex-direction:column;min-height:0}
+.hero{background:var(--site-primary);color:var(--site-on-primary);border-radius:calc(24px * var(--site-radius-scale));padding:18px 24px;position:relative;overflow:hidden}
 .hero:after{content:"";position:absolute;width:240px;height:240px;border:1px solid #ffffff40;border-radius:50%;right:-80px;top:-120px;box-shadow:0 0 0 28px #ffffff10,0 0 0 58px #ffffff08;pointer-events:none;opacity:var(--site-decoration-opacity)}
 .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;opacity:.85}
 h1{font-size:calc(32px * var(--site-heading-scale));line-height:1.2;margin:8px 0 10px;font-family:var(--site-font-heading)}
 .hero p{margin:0;max-width:580px;color:#E8F1EB}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.pills{display:none}
 .pill{background:#ffffff20;border:1px solid #ffffff35;border-radius:999px;padding:6px 10px;font-size:12px}
-.personal-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.personal-links{display:none}
 .personal-links a{display:inline-block;color:inherit;text-decoration:none;border:1px solid light-dark(#D8E0D8,#415247);background:light-dark(#FFFFFF,#202D27);padding:8px 12px;border-radius:10px;font-size:13px;font-weight:700}
 .personal-links a[aria-current="page"]{background:var(--site-secondary);color:var(--site-on-secondary);border-color:var(--site-primary)}
-.layout{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
-.panel{background:light-dark(#FFFFFF,#202D27);border:1px solid light-dark(#E0E5DF,#34453B);border-radius:calc(18px * var(--site-radius-scale));padding:18px}
+.layout{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px;flex:0 0 auto}
+.panel{background:light-dark(#FFFFFF,#202D27);border:1px solid light-dark(#E0E5DF,#34453B);border-radius:calc(18px * var(--site-radius-scale));padding:14px}
 .panel h2{font-size:17px;margin:0 0 14px}
 .persons{display:grid;gap:14px}
 .person{display:flex;gap:10px;align-items:center}
@@ -45,14 +45,14 @@ h1{font-size:calc(32px * var(--site-heading-scale));line-height:1.2;margin:8px 0
 .muted{color:light-dark(#6B776F,#A7B4AB);font-size:12px}
 .track{height:7px;background:light-dark(#E9EDE8,#39473F);border-radius:99px;overflow:hidden}
 .fill{height:100%;background:#4B9878;border-radius:99px;transition:width .2s}
-.callout{font-size:12px;padding:12px;border-radius:12px;background:light-dark(#F5F7F2,#26382E);margin-top:16px;color:light-dark(#526157,#C2D0C5)}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:22px 0 12px}
+.callout{font-size:12px;padding:10px;border-radius:12px;background:light-dark(#F5F7F2,#26382E);margin-top:10px;color:light-dark(#526157,#C2D0C5)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:12px 0 10px}
 .toolbar h2{margin:0;font-size:20px}
 .select-wrap{display:flex;gap:8px;align-items:center;font-size:13px}
 select,button{font:inherit;border-radius:10px;border:1px solid light-dark(#D8E0D8,#415247);padding:9px 12px;background:light-dark(#FFFFFF,#202D27);color:inherit}
 button{cursor:pointer}
 button.primary{background:var(--site-primary);color:white;border-color:var(--site-primary);font-weight:700}
-.weeks{display:grid;gap:10px}
+.weeks{display:grid;gap:10px;overflow-y:auto;overscroll-behavior:contain;min-height:0;flex:1;padding:2px 3px 12px;scrollbar-gutter:stable}
 .week{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;background:light-dark(#FFFFFF,#202D27);border:1px solid light-dark(#E0E5DF,#34453B);border-radius:15px;padding:14px;transition:border-color .2s}
 .week.done{border-color:#6CA98D;background:light-dark(#F3F8F4,#22352B)}
 .week-num{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--site-secondary);color:var(--site-on-secondary);font-weight:800;font-size:13px}
@@ -62,8 +62,8 @@ button.primary{background:var(--site-primary);color:white;border-color:var(--sit
 .check{display:flex;align-items:center;gap:8px;font-size:12px;white-space:nowrap;cursor:pointer}
 .check input{width:20px;height:20px;accent-color:var(--site-primary)}
 .notice{font-size:12px;color:light-dark(#7B5B26,#E8C887);background:light-dark(#FFF6DF,#3A3020);padding:12px 14px;border-radius:12px;margin:16px 0}
-.footer{text-align:center;font-size:12px;color:light-dark(#78837A,#A7B4AB);margin-top:22px}
-@media(max-width:700px){#app{padding:16px 12px 36px}.hero{padding:23px 20px}h1{font-size:27px}.layout{grid-template-columns:1fr}.week{grid-template-columns:38px 1fr auto;gap:9px;padding:12px 10px}.week .detail{max-width:240px}.check span{display:none}}
+.footer{text-align:center;font-size:12px;color:light-dark(#78837A,#A7B4AB);margin-top:22px;display:none}
+@media(max-width:700px){#app{padding:10px 12px 10px}.hero{padding:13px 16px;border-radius:18px}h1{font-size:23px;margin:5px 0 6px}.eyebrow{font-size:10px}.hero p{font-size:13px}.layout{margin-top:10px}.panel{padding:11px}.panel h2{margin-bottom:9px}.persons{gap:9px}.avatar{width:32px;height:32px}.callout{font-size:11px;padding:8px;margin-top:8px}.toolbar h2{font-size:19px}.toolbar{margin:10px 0 8px}.week{grid-template-columns:38px 1fr auto;gap:9px;padding:12px 10px}.week .detail{max-width:240px}.check span{display:none}}
 </style>
 </head>
 <body>
@@ -73,7 +73,7 @@ button.primary{background:var(--site-primary);color:white;border-color:var(--sit
  <div class="eyebrow">PSALMS · READ TOGETHER</div>
  <h1 id="pageTitle">효윤이의 시편 20주 챌린지</h1>
  <p>천천히, 꾸준히. 이번 주 읽기를 마치면 완료를 체크해요.</p>
- <div class="pills"><span class="pill">참여자 3명</span><span class="pill">시편 1~150편</span><span class="pill">20주 완독 계획</span></div>
+<div class="pills"><span class="pill">참여자 3명</span><span class="pill">시편 1~150편</span><span class="pill">20주 완독 계획</span></div>
 </header>
 <nav id="personalLinks" class="personal-links" aria-label="개인별 읽기 페이지"></nav>
 <div class="layout">
@@ -135,6 +135,13 @@ function renderWeeks() {
   const completed = e.target.checked;
   state[p][weekNumber] = completed;
   render();
+  if (completed) {
+   const nextWeek = weeks.find(w => state[p][w.week] !== true);
+   requestAnimationFrame(() => {
+    const target = nextWeek ? weekRoot.querySelector(`[data-week="${nextWeek.week}"]`)?.closest(".week") : null;
+    if (target) target.scrollIntoView({block:"start",behavior:"smooth"});
+   });
+  }
   if (!supabase) {
    setStatus("Supabase 연결 정보가 아직 입력되지 않았어요. index.html에 프로젝트 URL과 Publishable key를 입력해 주세요.");
    return;
@@ -177,6 +184,13 @@ async function loadProgress() {
   if (personName && row.week_number >= 1 && row.week_number <= 20) state[personName][row.week_number] = row.completed;
  });
  render();
+ const nextWeek = weeks.find(w => state[currentPersonName][w.week] !== true);
+ if (nextWeek) {
+  requestAnimationFrame(() => {
+   const target = weekRoot.querySelector(`[data-week="${nextWeek.week}"]`)?.closest(".week");
+   if (target) target.scrollIntoView({block:"start",behavior:"auto"});
+  });
+ }
  setStatus("공유된 읽기 기록을 불러왔어요. 체크하면 온라인에 저장돼요.");
 }
 loadProgress();
