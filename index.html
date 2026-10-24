@@ -51,8 +51,8 @@ h1{font-size:calc(32px * var(--site-heading-scale));line-height:1.2;margin:8px 0
 .avatar img.melody-avatar{transform:scale(1.22);transform-origin:center center}
 .person-main{flex:1 1 0%;width:0;min-width:0}
 .person-line{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}
-.person-verse{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden;white-space:nowrap;vertical-align:top;font-size:12px;margin:0 0 6px;padding:0;background:transparent}
-.person-verse-text{display:inline-block;width:max-content;max-width:100%;box-sizing:border-box;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:top;padding:2px 6px;border-radius:5px;color:light-dark(#4F7A64,#B5D5C0);background:light-dark(#F0F5EF,#26382E)}
+.person-verse{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden;white-space:normal;vertical-align:top;font-size:12px;line-height:1.5;margin:0 0 6px;padding:0;background:transparent}
+.person-verse-text{display:-webkit-box;width:fit-content;max-width:100%;min-width:0;box-sizing:border-box;overflow:hidden;text-overflow:ellipsis;white-space:normal;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;vertical-align:top;padding:2px 6px;border-radius:5px;line-height:1.5;color:light-dark(#4F7A64,#B5D5C0);background:light-dark(#F0F5EF,#26382E)}
 .person-verse.empty{display:none}
 .muted{color:light-dark(#6B776F,#A7B4AB);font-size:12px}
 .track{height:7px;background:light-dark(#E9EDE8,#39473F);border-radius:99px;overflow:hidden}
