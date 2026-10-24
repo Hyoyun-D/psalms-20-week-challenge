@@ -59,13 +59,21 @@ button.primary{background:var(--site-primary);color:white;border-color:var(--sit
 .week.done{border-color:#6CA98D;background:light-dark(#F3F8F4,#22352B)}
 .week-num{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--site-secondary);color:var(--site-on-secondary);font-weight:800;font-size:13px}
 .week.done .week-num{background:#D6EBDD;color:#285A42}
+.week-content{min-width:0}
+.verse-note{grid-column:2 / 4;width:100%;min-height:76px;resize:vertical;border:1px solid light-dark(#DDE5DC,#415247);border-radius:12px;padding:11px 13px;background:light-dark(#F8FAF6,#1B2922);color:inherit;font:inherit;font-size:13px;line-height:1.6;outline:none;transition:border-color .2s,box-shadow .2s}
+.verse-note{scrollbar-width:none;}
+.verse-note::-webkit-scrollbar{display:none}
+.verse-note:focus{border-color:#5B9A79;box-shadow:0 0 0 3px #5B9A791F}
+.verse-note::placeholder{color:light-dark(#8B978D,#91A096)}
+.note-footer{grid-column:2 / 4;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-5px;font-size:11px;color:light-dark(#7B887D,#A7B4AB);min-height:15px}
+.week.done .verse-note{background:light-dark(#F7FAF7,#1D2D23)}
 .week h3{margin:0;font-size:15px}
 .week .detail{font-size:12px;color:light-dark(#78837A,#A7B4AB);margin-top:3px}
 .check{display:flex;align-items:center;gap:8px;font-size:12px;white-space:nowrap;cursor:pointer}
 .check input{width:20px;height:20px;accent-color:var(--site-primary)}
 .notice{font-size:12px;color:light-dark(#7B5B26,#E8C887);background:light-dark(#FFF6DF,#3A3020);padding:12px 14px;border-radius:12px;margin:16px 0}
 .footer{text-align:center;font-size:12px;color:light-dark(#78837A,#A7B4AB);margin-top:22px;display:none}
-@media(max-width:700px){#app{padding:10px 12px 10px}.hero{padding:13px 16px;border-radius:18px}h1{font-size:23px;margin:5px 0 6px}.eyebrow{font-size:10px}.hero p{font-size:13px}.layout{margin-top:10px}.panel{padding:11px}.panel h2{margin-bottom:9px}.persons{gap:9px}.avatar{width:32px;height:32px}.callout{font-size:11px;padding:8px;margin-top:8px}.toolbar h2{font-size:19px}.toolbar{margin:10px 0 8px}.week{grid-template-columns:38px 1fr auto;gap:9px;padding:12px 10px}.week .detail{max-width:240px}.check span{display:none}}
+@media(max-width:700px){#app{padding:10px 12px 10px}.hero{padding:13px 16px;border-radius:18px}h1{font-size:23px;margin:5px 0 6px}.eyebrow{font-size:10px}.hero p{font-size:13px}.layout{margin-top:10px}.panel{padding:11px}.panel h2{margin-bottom:9px}.persons{gap:9px}.avatar{width:32px;height:32px}.callout{font-size:11px;padding:8px;margin-top:8px}.toolbar h2{font-size:19px}.toolbar{margin:10px 0 8px}.week{grid-template-columns:38px 1fr auto;gap:9px;padding:12px 10px}.week .detail{max-width:240px}.check span{display:none}.verse-note,.note-footer{grid-column:1 / 4}}
 </style>
 </head>
 <body>
@@ -108,6 +116,8 @@ const queryPerson = new URLSearchParams(location.search).get("person");
 let currentPersonName = personIds[queryPerson || pathPart] || "효윤";
 const personalLinks = [{name:"효윤",id:"hyoyun"},{name:"은경",id:"eunkyung"},{name:"주연",id:"juyeon"}];
 let state = {"효윤":{},"은경":{},"주연":{}};
+let notes = {"효윤":{},"은경":{},"주연":{}};
+const noteTimers = {};
 const weekRoot = document.getElementById("weeks");
 const peopleRoot = document.getElementById("people");
 const callout = document.querySelector(".callout");
@@ -120,6 +130,7 @@ function renderPersonalLinks() {
  document.getElementById("personalLinks").innerHTML = personalLinks.map(person => `<a href="?person=${person.id}" ${person.name === currentPersonName ? 'aria-current="page"' : ""}>${person.name}의 페이지</a>`).join("");
 }
 function doneCount(p) { return weeks.filter(w => state[p][w.week] === true).length; }
+function escapeHtml(value) { return String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char])); }
 function renderPeople() {
  peopleRoot.innerHTML = people.map(p => {
   const count = doneCount(p), pct = Math.round(count / 20 * 100);
@@ -130,8 +141,25 @@ function renderWeeks() {
  const p = currentPersonName;
  weekRoot.innerHTML = weeks.map(w => {
   const checked = state[p][w.week] === true;
-  return `<article class="week ${checked ? "done" : ""}"><div class="week-num">${String(w.week).padStart(2,"0")}</div><div><h3>${w.range}</h3><div class="detail">${w.detail}</div></div><label class="check"><input type="checkbox" data-week="${w.week}" ${checked ? "checked" : ""}><span>완료</span></label></article>`;
+  const note = notes[p][w.week] || "";
+  return `<article class="week ${checked ? "done" : ""}"><div class="week-num">${String(w.week).padStart(2,"0")}</div><div class="week-content"><h3>${w.range}</h3><div class="detail">${w.detail}</div></div><label class="check"><input type="checkbox" data-week="${w.week}" ${checked ? "checked" : ""}><span>완료</span></label><textarea class="verse-note" data-note-week="${w.week}" placeholder="인상깊은 구절을 적어주세요" aria-label="${w.range} 인상깊은 구절">${escapeHtml(note)}</textarea><div class="note-footer"><span>나에게 남은 말씀</span><span data-note-status="${w.week}"></span></div></article>`;
  }).join("");
+ weekRoot.querySelectorAll("textarea[data-note-week]").forEach(textarea => textarea.addEventListener("input", e => {
+  const weekNumber = Number(e.target.dataset.noteWeek);
+  const value = e.target.value;
+  notes[p][weekNumber] = value;
+  const status = weekRoot.querySelector(`[data-note-status="${weekNumber}"]`);
+  if (!supabase) { if (status) status.textContent = "온라인 저장 연결 필요"; return; }
+  if (status) status.textContent = "저장 중…";
+  const timerKey = `${p}-${weekNumber}`;
+  clearTimeout(noteTimers[timerKey]);
+  noteTimers[timerKey] = setTimeout(async () => {
+   const personId = personalLinks.find(person => person.name === p).id;
+   const { error } = await supabase.from("reading_progress").upsert({person_id:personId,week_number:weekNumber,completed:state[p][weekNumber] === true,verse_note:value || null,updated_at:new Date().toISOString()}, {onConflict:"person_id,week_number"});
+   if (status) status.textContent = error ? "저장 실패 · 다시 시도해 주세요" : "자동 저장됨";
+   if (error) { console.error(error); setStatus("메모를 저장하지 못했어요. Supabase의 verse_note 컬럼을 확인해 주세요."); }
+  }, 700);
+ }));
  weekRoot.querySelectorAll("input[data-week]").forEach(input => input.addEventListener("change", async e => {
   const weekNumber = Number(e.target.dataset.week);
   const completed = e.target.checked;
@@ -168,6 +196,7 @@ if (completed) {
    person_id: personalLinks.find(person => person.name === p).id,
    week_number: weekNumber,
    completed,
+   verse_note: notes[p][weekNumber] || null,
    updated_at: new Date().toISOString()
   }, { onConflict: "person_id,week_number" });
   if (error) {
@@ -190,7 +219,7 @@ async function loadProgress() {
   return;
  }
  setStatus("공유된 읽기 기록을 불러오는 중이에요…");
- const { data, error } = await supabase.from("reading_progress").select("person_id, week_number, completed");
+ const { data, error } = await supabase.from("reading_progress").select("person_id, week_number, completed, verse_note");
  if (error) {
   setStatus("기록을 불러오지 못했어요. Supabase 테이블과 접근 권한 설정을 확인해 주세요.");
   console.error(error);
@@ -198,7 +227,10 @@ async function loadProgress() {
  }
  data.forEach(row => {
   const personName = personIds[row.person_id];
-  if (personName && row.week_number >= 1 && row.week_number <= 20) state[personName][row.week_number] = row.completed;
+  if (personName && row.week_number >= 1 && row.week_number <= 20) {
+   state[personName][row.week_number] = row.completed;
+   notes[personName][row.week_number] = row.verse_note || "";
+  }
  });
  render();
  const nextWeek = weeks.find(w => state[currentPersonName][w.week] !== true);
