@@ -31,6 +31,10 @@ body{margin:0;font-family:var(--site-font-body);background:var(--site-background
 .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;opacity:.85}
 h1{font-size:calc(32px * var(--site-heading-scale));line-height:1.2;margin:8px 0 10px;font-family:var(--site-font-heading)}
 .hero p{margin:0;max-width:580px;color:#E8F1EB}
+.hero-tools{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:12px;position:relative;z-index:1;min-width:0}
+#syncStatus{font-size:12px;color:#E8F1EB;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#refreshProgress{flex-shrink:0;padding:5px 10px;border:1px solid #ffffff70;border-radius:9px;background:#ffffff18;color:#fff;font-size:12px;line-height:1.4}
+#refreshProgress:disabled{opacity:.65;cursor:wait}
 .pills{display:none}
 .pill{background:#ffffff20;border:1px solid #ffffff35;border-radius:999px;padding:6px 10px;font-size:12px}
 .personal-links{display:none}
@@ -47,12 +51,12 @@ h1{font-size:calc(32px * var(--site-heading-scale));line-height:1.2;margin:8px 0
 .avatar img.melody-avatar{transform:scale(1.22);transform-origin:center center}
 .person-main{flex:1 1 0%;width:0;min-width:0}
 .person-line{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}
-.person-verse{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:top;color:light-dark(#4F7A64,#B5D5C0);font-size:12px;margin:0 0 6px;padding:2px 6px;border-radius:5px;background:light-dark(#F0F5EF,#26382E)}
+.person-verse{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden;white-space:nowrap;vertical-align:top;font-size:12px;margin:0 0 6px;padding:0;background:transparent}
+.person-verse-text{display:inline-block;width:max-content;max-width:100%;box-sizing:border-box;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:top;padding:2px 6px;border-radius:5px;color:light-dark(#4F7A64,#B5D5C0);background:light-dark(#F0F5EF,#26382E)}
 .person-verse.empty{display:none}
 .muted{color:light-dark(#6B776F,#A7B4AB);font-size:12px}
 .track{height:7px;background:light-dark(#E9EDE8,#39473F);border-radius:99px;overflow:hidden}
 .fill{height:100%;background:#4B9878;border-radius:99px;transition:width .2s}
-.callout{font-size:12px;padding:10px;border-radius:12px;background:light-dark(#F5F7F2,#26382E);margin-top:10px;color:light-dark(#526157,#C2D0C5)}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:12px 0 10px}
 .toolbar h2{margin:0;font-size:20px}
 .select-wrap{display:flex;gap:8px;align-items:center;font-size:13px}
@@ -70,7 +74,6 @@ button.primary{background:var(--site-primary);color:white;border-color:var(--sit
 .verse-note::-webkit-scrollbar{display:none}
 .verse-note:focus{border-color:#5B9A79;box-shadow:0 0 0 3px #5B9A791F}
 .verse-note::placeholder{color:light-dark(#8B978D,#91A096)}
-.note-footer{grid-column:2 / 4;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-5px;font-size:11px;color:light-dark(#7B887D,#A7B4AB);min-height:15px}
 .week.done .verse-note{background:light-dark(#F7FAF7,#1D2D23)}
 .week h3{margin:0;font-size:15px}
 .week .detail{font-size:12px;color:light-dark(#78837A,#A7B4AB);margin-top:3px}
@@ -78,7 +81,7 @@ button.primary{background:var(--site-primary);color:white;border-color:var(--sit
 .check{min-width:32px;min-height:32px;justify-content:center}.check input{width:28px;height:28px;accent-color:var(--site-primary);cursor:pointer}
 .notice{font-size:12px;color:light-dark(#7B5B26,#E8C887);background:light-dark(#FFF6DF,#3A3020);padding:12px 14px;border-radius:12px;margin:16px 0}
 .footer{text-align:center;font-size:12px;color:light-dark(#78837A,#A7B4AB);margin-top:22px;display:none}
-@media(max-width:700px){#app{padding:10px 12px 10px}.hero{padding:13px 16px;border-radius:18px}h1{font-size:23px;margin:5px 0 6px}.eyebrow{font-size:10px}.hero p{font-size:13px}.layout{margin-top:10px}.panel{padding:11px}.panel h2{margin-bottom:9px}.persons{gap:9px}.avatar{width:52px;height:52px}.callout{font-size:11px;padding:8px;margin-top:8px}.toolbar h2{font-size:19px}.toolbar{margin:10px 0 8px}.week{grid-template-columns:38px 1fr auto;gap:9px;padding:12px 10px}.week .detail{max-width:240px}.check span{display:none}.verse-note,.note-footer{grid-column:1 / 4}}
+@media(max-width:700px){#app{padding:10px 12px 10px}.hero{padding:13px 16px;border-radius:18px}h1{font-size:23px;margin:5px 0 6px}.eyebrow{font-size:10px}.hero p{font-size:13px}.layout{margin-top:10px}.panel{padding:11px}.panel h2{margin-bottom:9px}.persons{gap:9px}.avatar{width:52px;height:52px}.toolbar h2{font-size:19px}.toolbar{margin:10px 0 8px}.week{grid-template-columns:38px 1fr auto;gap:9px;padding:12px 10px}.week .detail{max-width:240px}.check span{display:none}.verse-note{grid-column:1 / 4}.hero-tools{gap:8px}#syncStatus{font-size:11px}}
 </style>
 </head>
 <body>
@@ -88,14 +91,17 @@ button.primary{background:var(--site-primary);color:white;border-color:var(--sit
  <div class="eyebrow">PSALMS · READ TOGETHER</div>
  <h1 id="pageTitle">효윤이의 시편 20주 챌린지</h1>
  <p>천천히, 꾸준히. 이번 주 읽기를 마치면 완료를 체크해요.</p>
+ <div class="hero-tools">
+  <span id="syncStatus" role="status" aria-live="polite">공유 기록 불러오는 중…</span>
+  <button id="refreshProgress" type="button" aria-label="공유 기록 새로고침"><span aria-hidden="true">↻</span> 새로고침</button>
+ </div>
 <div class="pills"><span class="pill">참여자 3명</span><span class="pill">시편 1~150편</span><span class="pill">20주 완독 계획</span></div>
 </header>
 <nav id="personalLinks" class="personal-links" aria-label="개인별 읽기 페이지"></nav>
 <div class="layout">
  <section class="panel">
-  <h2>우리의 진행 현황</h2>
+  <h2>진행 현황</h2>
   <div id="people" class="persons"></div>
-  <div class="callout">각자의 페이지에서 읽기를 체크하고, 서로의 진행 현황을 확인해요.</div>
  </section>
 </div>
 <div class="toolbar">
@@ -124,13 +130,16 @@ let state = {"효윤":{},"은경":{},"주연":{}};
 let notes = {"효윤":{},"은경":{},"주연":{}};
 let noteUpdated = {"효윤":{},"은경":{},"주연":{}};
 const noteTimers = {};
+const pendingNoteValues = {};
+const pendingSaves = {};
 const weekRoot = document.getElementById("weeks");
 const peopleRoot = document.getElementById("people");
-const callout = document.querySelector(".callout");
-function setStatus(message) { callout.textContent = message; }
+const syncStatus = document.getElementById("syncStatus");
+const refreshButton = document.getElementById("refreshProgress");
+function setStatus(message) { syncStatus.textContent = message; syncStatus.title = message; }
 function updateHeading() {
- document.getElementById("pageTitle").textContent = currentPersonName + "의 시편 20주 챌린지";
- document.getElementById("myNameLabel").textContent = currentPersonName + "의 읽기 기록";
+ document.getElementById("pageTitle").textContent = currentPersonName + "이의 시편 20주 챌린지";
+ document.getElementById("myNameLabel").textContent = currentPersonName + "이의 읽기 기록";
 }
 function renderPersonalLinks() {
  document.getElementById("personalLinks").innerHTML = personalLinks.map(person => `<a href="?person=${person.id}" ${person.name === currentPersonName ? 'aria-current="page"' : ""}>${person.name}의 페이지</a>`).join("");
@@ -149,7 +158,7 @@ function renderPeople() {
    .filter(week => notes[p][week] && notes[p][week].trim())
    .sort((a,b) => (noteUpdated[p][b] || "").localeCompare(noteUpdated[p][a] || ""))[0];
   const latestText = latestWeek ? notes[p][latestWeek].trim().replace(/\\s+/g," ") : "";
-  return `<div class="person"><div class="avatar"><img class="${p === "은경" ? "kuromi-avatar" : p === "주연" ? "melody-avatar" : ""}" src="${avatarImages[p]}" alt="${p}의 캐릭터"></div><div class="person-main"><div class="person-line"><strong>${p}</strong><span class="muted">${count}/20주 · ${pct}%</span></div><div class="person-verse ${latestText ? "" : "empty"}" title="${escapeHtml(latestText)}">${escapeHtml(latestText)}</div><div class="track"><div class="fill" style="width:${pct}%"></div></div></div></div>`;
+  return `<div class="person"><div class="avatar"><img class="${p === "은경" ? "kuromi-avatar" : p === "주연" ? "melody-avatar" : ""}" src="${avatarImages[p]}" alt="${p}의 캐릭터"></div><div class="person-main"><div class="person-line"><strong>${p}</strong><span class="muted">${count}/20주 · ${pct}%</span></div><div class="person-verse ${latestText ? "" : "empty"}" title="${escapeHtml(latestText)}"><span class="person-verse-text">${escapeHtml(latestText)}</span></div><div class="track"><div class="fill" style="width:${pct}%"></div></div></div></div>`;
  }).join("");
 }
 function renderWeeks() {
@@ -157,29 +166,23 @@ function renderWeeks() {
  weekRoot.innerHTML = weeks.map(w => {
   const checked = state[p][w.week] === true;
   const note = notes[p][w.week] || "";
-  return `<article class="week ${checked ? "done" : ""}"><div class="week-num">${String(w.week).padStart(2,"0")}</div><div class="week-content"><h3>${w.range}</h3><div class="detail">${w.detail}</div></div><label class="check"><input type="checkbox" data-week="${w.week}" ${checked ? "checked" : ""}><span>완료</span></label><textarea class="verse-note" data-note-week="${w.week}" placeholder="인상깊은 구절을 적어주세요" aria-label="${w.range} 인상깊은 구절">${escapeHtml(note)}</textarea><div class="note-footer"><span>나에게 남은 말씀</span><span data-note-status="${w.week}"></span></div></article>`;
+  return `<article class="week ${checked ? "done" : ""}"><div class="week-num">${String(w.week).padStart(2,"0")}</div><div class="week-content"><h3>${w.range}</h3><div class="detail">${w.detail}</div></div><label class="check"><input type="checkbox" data-week="${w.week}" ${checked ? "checked" : ""}><span>완료</span></label><textarea class="verse-note" data-note-week="${w.week}" placeholder="인상깊은 구절을 적어주세요" aria-label="${w.range} 인상깊은 구절">${escapeHtml(note)}</textarea></article>`;
  }).join("");
  weekRoot.querySelectorAll("textarea[data-note-week]").forEach(textarea => {
   const resizeNote = () => { textarea.style.height = "40px"; textarea.style.height = Math.min(textarea.scrollHeight, 90) + "px"; };
   resizeNote();
   textarea.addEventListener("input", e => {
    resizeNote();
-  const weekNumber = Number(e.target.dataset.noteWeek);
-  const value = e.target.value;
-  notes[p][weekNumber] = value;
-  renderPeople();
-  const status = weekRoot.querySelector(`[data-note-status="${weekNumber}"]`);
-  if (!supabase) { if (status) status.textContent = "온라인 저장 연결 필요"; return; }
-  if (status) status.textContent = "저장 중…";
-  const timerKey = `${p}-${weekNumber}`;
-  clearTimeout(noteTimers[timerKey]);
-  noteTimers[timerKey] = setTimeout(async () => {
-   const personId = personalLinks.find(person => person.name === p).id;
-   const { error } = await supabase.from("reading_progress").upsert({person_id:personId,week_number:weekNumber,completed:state[p][weekNumber] === true,verse_note:value || null,updated_at:new Date().toISOString()}, {onConflict:"person_id,week_number"});
-   if (status) status.textContent = error ? "저장 실패 · 다시 시도해 주세요" : "자동 저장됨";
-   if (!error) { noteUpdated[p][weekNumber] = new Date().toISOString(); renderPeople(); }
-   if (error) { console.error(error); setStatus("메모를 저장하지 못했어요. Supabase의 verse_note 컬럼을 확인해 주세요."); }
-  }, 700);
+   const weekNumber = Number(e.target.dataset.noteWeek);
+   const value = e.target.value;
+   notes[p][weekNumber] = value;
+   renderPeople();
+   const timerKey = `${p}-${weekNumber}`;
+   pendingNoteValues[timerKey] = value;
+   if (!supabase) { setStatus("온라인 저장 연결이 필요해요."); return; }
+   setStatus("메모 저장 대기 중…");
+   clearTimeout(noteTimers[timerKey]);
+   noteTimers[timerKey] = setTimeout(() => { saveNote(p, weekNumber, value); }, 700);
   });
  });
  weekRoot.querySelectorAll("input[data-week]").forEach(input => input.addEventListener("change", async e => {
@@ -224,29 +227,78 @@ if (completed) {
   if (error) {
    state[p][weekNumber] = !completed;
    render();
-   setStatus("저장하지 못했어요. Supabase 테이블과 접근 권한 설정을 확인해 주세요.");
+   setStatus("저장에 실패했어요. 다시 시도해 주세요.");
    console.error(error);
   } else {
-   setStatus("읽기 기록이 온라인에 저장됐어요. 친구들과 같은 진행 현황을 볼 수 있어요.");
+   setStatus("공유 기록 동기화 완료");
   }
  }));
 }
 function render() { renderPeople(); renderWeeks(); }
-async function loadProgress() {
+async function saveNote(personName, weekNumber, value) {
+ const timerKey = `${personName}-${weekNumber}`;
+ clearTimeout(noteTimers[timerKey]);
+ delete noteTimers[timerKey];
+ if (!supabase) return false;
+ const personId = personalLinks.find(person => person.name === personName)?.id;
+ if (!personId) return false;
+ const savePromise = (async () => {
+  const { error } = await supabase.from("reading_progress").upsert({
+   person_id: personId,
+   week_number: weekNumber,
+   completed: state[personName][weekNumber] === true,
+   verse_note: value || null,
+   updated_at: new Date().toISOString()
+  }, { onConflict: "person_id,week_number" });
+  if (error) {
+   console.error(error);
+   setStatus("메모 저장에 실패했어요. 새로고침 전에 다시 시도해 주세요.");
+   return false;
+  }
+  noteUpdated[personName][weekNumber] = new Date().toISOString();
+  if (pendingNoteValues[timerKey] === value) delete pendingNoteValues[timerKey];
+  setStatus("공유 기록 동기화 완료");
+  renderPeople();
+  return true;
+ })();
+ pendingSaves[timerKey] = savePromise;
+ const result = await savePromise;
+ delete pendingSaves[timerKey];
+ return result;
+}
+async function flushPendingNotes() {
+ const keys = Object.keys(pendingNoteValues);
+ for (const key of keys) {
+  const splitAt = key.lastIndexOf("-");
+  const personName = key.slice(0, splitAt);
+  const weekNumber = Number(key.slice(splitAt + 1));
+  const value = pendingNoteValues[key];
+  clearTimeout(noteTimers[key]);
+  await saveNote(personName, weekNumber, value);
+ }
+ await Promise.all(Object.values(pendingSaves));
+ return Object.keys(pendingNoteValues).length === 0;
+}
+async function loadProgress({ scrollToNext = true } = {}) {
  updateHeading();
  renderPersonalLinks();
+ // Render the reading table and participant rows immediately, even if the
+ // shared-record request fails, so the page never appears empty.
  render();
  if (!supabase) {
-  setStatus("연결 준비 완료: 아래 코드의 Supabase URL과 Publishable key 부분을 실제 값으로 바꾸면 온라인 저장이 활성화돼요.");
-  return;
+  setStatus("온라인 저장 연결이 필요해요.");
+  return false;
  }
- setStatus("공유된 읽기 기록을 불러오는 중이에요…");
+ setStatus("공유 기록 불러오는 중…");
  const { data, error } = await supabase.from("reading_progress").select("person_id, week_number, completed, verse_note, updated_at");
  if (error) {
-  setStatus("기록을 불러오지 못했어요. Supabase 테이블과 접근 권한 설정을 확인해 주세요.");
+  setStatus("공유 기록을 불러오지 못했어요. 새로고침해 주세요.");
   console.error(error);
-  return;
+  return false;
  }
+ state = {"효윤":{},"은경":{},"주연":{}};
+ notes = {"효윤":{},"은경":{},"주연":{}};
+ noteUpdated = {"효윤":{},"은경":{},"주연":{}};
  data.forEach(row => {
   const personName = personIds[row.person_id];
   if (personName && row.week_number >= 1 && row.week_number <= 20) {
@@ -257,14 +309,33 @@ async function loadProgress() {
  });
  render();
  const nextWeek = weeks.find(w => state[currentPersonName][w.week] !== true);
- if (nextWeek) {
+ if (scrollToNext && nextWeek) {
   requestAnimationFrame(() => {
    const target = weekRoot.querySelector(`[data-week="${nextWeek.week}"]`)?.closest(".week");
    if (target) target.scrollIntoView({block:"start",behavior:"auto"});
   });
  }
- setStatus("공유된 읽기 기록을 불러왔어요. 체크하면 온라인에 저장돼요.");
+ setStatus("공유 기록 동기화 완료");
+ return true;
 }
+refreshButton.addEventListener("click", async () => {
+ if (refreshButton.disabled) return;
+ refreshButton.disabled = true;
+ try {
+  setStatus("저장 중인 메모 확인 중…");
+  const saved = await flushPendingNotes();
+  if (!saved) {
+   setStatus("메모 저장에 실패했어요. 저장 상태를 확인한 뒤 다시 시도해 주세요.");
+   return;
+  }
+  await loadProgress({ scrollToNext: false });
+ } catch (error) {
+  console.error(error);
+  setStatus("새로고침에 실패했어요. 다시 시도해 주세요.");
+ } finally {
+  refreshButton.disabled = false;
+ }
+});
 loadProgress();
 </script>
 </body>
