@@ -145,8 +145,10 @@ function renderPeople() {
  };
  peopleRoot.innerHTML = people.map(p => {
   const count = doneCount(p), pct = Math.round(count / 20 * 100);
-  const latest = Object.keys(notes[p]).filter(week => notes[p][week] && notes[p][week].trim()).sort((a,b) => (noteUpdated[p][b] || "").localeCompare(noteUpdated[p][a] || ""))[0];
-  const latestText = latest ? notes[p][latest].trim().replace(/\\s+/g," ") : "";
+  const latestWeek = Object.keys(notes[p])
+   .filter(week => notes[p][week] && notes[p][week].trim())
+   .sort((a,b) => (noteUpdated[p][b] || "").localeCompare(noteUpdated[p][a] || ""))[0];
+  const latestText = latestWeek ? notes[p][latestWeek].trim().replace(/\\s+/g," ") : "";
   return `<div class="person"><div class="avatar"><img class="${p === "은경" ? "kuromi-avatar" : p === "주연" ? "melody-avatar" : ""}" src="${avatarImages[p]}" alt="${p}의 캐릭터"></div><div class="person-main"><div class="person-line"><strong>${p}</strong><span class="muted">${count}/20주 · ${pct}%</span></div><div class="person-verse ${latestText ? "" : "empty"}" title="${escapeHtml(latestText)}">${escapeHtml(latestText)}</div><div class="track"><div class="fill" style="width:${pct}%"></div></div></div></div>`;
  }).join("");
 }
@@ -165,6 +167,7 @@ function renderWeeks() {
   const weekNumber = Number(e.target.dataset.noteWeek);
   const value = e.target.value;
   notes[p][weekNumber] = value;
+  renderPeople();
   const status = weekRoot.querySelector(`[data-note-status="${weekNumber}"]`);
   if (!supabase) { if (status) status.textContent = "온라인 저장 연결 필요"; return; }
   if (status) status.textContent = "저장 중…";
@@ -174,6 +177,7 @@ function renderWeeks() {
    const personId = personalLinks.find(person => person.name === p).id;
    const { error } = await supabase.from("reading_progress").upsert({person_id:personId,week_number:weekNumber,completed:state[p][weekNumber] === true,verse_note:value || null,updated_at:new Date().toISOString()}, {onConflict:"person_id,week_number"});
    if (status) status.textContent = error ? "저장 실패 · 다시 시도해 주세요" : "자동 저장됨";
+   if (!error) { noteUpdated[p][weekNumber] = new Date().toISOString(); renderPeople(); }
    if (error) { console.error(error); setStatus("메모를 저장하지 못했어요. Supabase의 verse_note 컬럼을 확인해 주세요."); }
   }, 700);
   });
