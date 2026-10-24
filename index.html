@@ -45,12 +45,12 @@ h1{font-size:calc(32px * var(--site-heading-scale));line-height:1.2;margin:8px 0
 .panel h2{font-size:17px;margin:0 0 14px}
 .persons{display:grid;gap:14px;min-width:0;width:100%}
 .person{display:flex;gap:10px;align-items:center;min-width:0;width:100%}
-.avatar{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:var(--site-secondary);color:var(--site-on-secondary);font-weight:800;flex-shrink:0;overflow:hidden;border:1px solid light-dark(#E0E5DF,#34453B)}
+.avatar{width:68px;height:68px;flex:0 0 68px;border-radius:50%;display:grid;place-items:center;background:var(--site-secondary);color:var(--site-on-secondary);font-weight:800;overflow:hidden;border:1px solid light-dark(#E0E5DF,#34453B)}
 .avatar img{display:block;width:100%;height:100%;object-fit:contain}
 .avatar img.kuromi-avatar{transform:scale(1.78);transform-origin:center center}
 .avatar img.melody-avatar{transform:scale(1.22);transform-origin:center center}
 .person-main{flex:1 1 0%;width:0;min-width:0}
-.person-line{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}
+.person-line{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;min-width:0}.person-line strong{flex:0 0 auto}.person-line .track{flex:1 1 auto;min-width:0;height:7px;margin:0}.person-line .muted{flex:0 0 auto;white-space:nowrap}
 .person-verse{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden;white-space:normal;vertical-align:top;font-size:12px;line-height:1.5;margin:0 0 6px;padding:0;background:transparent}
 .person-verse-text{display:-webkit-box;width:fit-content;max-width:100%;min-width:0;box-sizing:border-box;overflow:hidden;text-overflow:ellipsis;white-space:normal;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;vertical-align:top;padding:2px 6px;border-radius:5px;line-height:1.5;color:light-dark(#4F7A64,#B5D5C0);background:light-dark(#F0F5EF,#26382E)}
 .person-verse.empty{display:none}
@@ -81,7 +81,7 @@ button.primary{background:var(--site-primary);color:white;border-color:var(--sit
 .check{min-width:32px;min-height:32px;justify-content:center}.check input{width:28px;height:28px;accent-color:var(--site-primary);cursor:pointer}
 .notice{font-size:12px;color:light-dark(#7B5B26,#E8C887);background:light-dark(#FFF6DF,#3A3020);padding:12px 14px;border-radius:12px;margin:16px 0}
 .footer{text-align:center;font-size:12px;color:light-dark(#78837A,#A7B4AB);margin-top:22px;display:none}
-@media(max-width:700px){#app{padding:10px 12px 10px}.hero{padding:13px 16px;border-radius:18px}h1{font-size:23px;margin:5px 0 6px}.eyebrow{font-size:10px}.hero p{font-size:13px}.layout{margin-top:10px}.panel{padding:11px}.panel h2{margin-bottom:9px}.persons{gap:9px}.avatar{width:52px;height:52px}.toolbar h2{font-size:19px}.toolbar{margin:10px 0 8px}.week{grid-template-columns:38px 1fr auto;gap:9px;padding:12px 10px}.week .detail{max-width:240px}.check span{display:none}.verse-note{grid-column:1 / 4}.hero-tools{gap:8px}#syncStatus{font-size:11px}}
+@media(max-width:700px){#app{padding:10px 12px 10px}.hero{padding:13px 16px;border-radius:18px}h1{font-size:23px;margin:5px 0 6px}.eyebrow{font-size:10px}.hero p{font-size:13px}.layout{margin-top:10px}.panel{padding:11px}.panel h2{margin-bottom:9px}.persons{gap:9px}.avatar{width:60px;height:60px;flex-basis:60px}.toolbar h2{font-size:19px}.toolbar{margin:10px 0 8px}.week{grid-template-columns:38px 1fr auto;gap:9px;padding:12px 10px}.week .detail{max-width:240px}.check span{display:none}.verse-note{grid-column:1 / 4}.hero-tools{gap:8px}#syncStatus{font-size:11px}}
 </style>
 </head>
 <body>
@@ -158,7 +158,7 @@ function renderPeople() {
    .filter(week => notes[p][week] && notes[p][week].trim())
    .sort((a,b) => (noteUpdated[p][b] || "").localeCompare(noteUpdated[p][a] || ""))[0];
   const latestText = latestWeek ? notes[p][latestWeek].trim().replace(/\\s+/g," ") : "";
-  return `<div class="person"><div class="avatar"><img class="${p === "은경" ? "kuromi-avatar" : p === "주연" ? "melody-avatar" : ""}" src="${avatarImages[p]}" alt="${p}의 캐릭터"></div><div class="person-main"><div class="person-line"><strong>${p}</strong><span class="muted">${count}/20주 · ${pct}%</span></div><div class="person-verse ${latestText ? "" : "empty"}" title="${escapeHtml(latestText)}"><span class="person-verse-text">${escapeHtml(latestText)}</span></div><div class="track"><div class="fill" style="width:${pct}%"></div></div></div></div>`;
+  return `<div class="person"><div class="avatar"><img class="${p === "은경" ? "kuromi-avatar" : p === "주연" ? "melody-avatar" : ""}" src="${avatarImages[p]}" alt="${p}의 캐릭터"></div><div class="person-main"><div class="person-line"><strong>${p}</strong><div class="track"><div class="fill" style="width:${pct}%"></div></div><span class="muted">${count}/20주 · ${pct}%</span></div><div class="person-verse ${latestText ? "" : "empty"}" title="${escapeHtml(latestText)}"><span class="person-verse-text">${escapeHtml(latestText)}</span></div></div></div>`;
  }).join("");
 }
 function renderWeeks() {
