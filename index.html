@@ -25,7 +25,7 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:var(--site-font-body);background:var(--site-background);color:var(--site-on-background);line-height:1.5}
 #app{min-height:0;height:100vh;height:100dvh;overflow:hidden;background-color:light-dark(var(--site-background),#17231E);color:light-dark(var(--site-on-background),#EDF3EF);padding:18px 16px 18px}
-.wrap{max-width:900px;width:100%;height:100%;margin:0 auto;display:flex;flex-direction:column;min-height:0}
+.wrap{max-width:900px;width:100%;height:100%;margin:0 auto;display:flex;flex-direction:column;min-height:0;min-width:0}
 .hero{background:var(--site-primary);color:var(--site-on-primary);border-radius:calc(24px * var(--site-radius-scale));padding:18px 24px;position:relative;overflow:hidden}
 .hero:after{content:"";position:absolute;width:240px;height:240px;border:1px solid #ffffff40;border-radius:50%;right:-80px;top:-120px;box-shadow:0 0 0 28px #ffffff10,0 0 0 58px #ffffff08;pointer-events:none;opacity:var(--site-decoration-opacity)}
 .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;opacity:.85}
@@ -36,18 +36,18 @@ h1{font-size:calc(32px * var(--site-heading-scale));line-height:1.2;margin:8px 0
 .personal-links{display:none}
 .personal-links a{display:inline-block;color:inherit;text-decoration:none;border:1px solid light-dark(#D8E0D8,#415247);background:light-dark(#FFFFFF,#202D27);padding:8px 12px;border-radius:10px;font-size:13px;font-weight:700}
 .personal-links a[aria-current="page"]{background:var(--site-secondary);color:var(--site-on-secondary);border-color:var(--site-primary)}
-.layout{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px;flex:0 0 auto}
-.panel{background:light-dark(#FFFFFF,#202D27);border:1px solid light-dark(#E0E5DF,#34453B);border-radius:calc(18px * var(--site-radius-scale));padding:14px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:12px;flex:0 0 auto;min-width:0;width:100%}
+.panel{background:light-dark(#FFFFFF,#202D27);border:1px solid light-dark(#E0E5DF,#34453B);border-radius:calc(18px * var(--site-radius-scale));padding:14px;min-width:0;width:100%}
 .panel h2{font-size:17px;margin:0 0 14px}
-.persons{display:grid;gap:14px}
-.person{display:flex;gap:10px;align-items:center}
+.persons{display:grid;gap:14px;min-width:0;width:100%}
+.person{display:flex;gap:10px;align-items:center;min-width:0;width:100%}
 .avatar{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:var(--site-secondary);color:var(--site-on-secondary);font-weight:800;flex-shrink:0;overflow:hidden;border:1px solid light-dark(#E0E5DF,#34453B)}
 .avatar img{display:block;width:100%;height:100%;object-fit:contain}
 .avatar img.kuromi-avatar{transform:scale(1.78);transform-origin:center center}
 .avatar img.melody-avatar{transform:scale(1.22);transform-origin:center center}
-.person-main{flex:1;min-width:0}
+.person-main{flex:1 1 0%;width:0;min-width:0}
 .person-line{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}
-.person-verse{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:light-dark(#4F7A64,#B5D5C0);font-size:12px;margin:0 0 6px;padding:2px 6px;border-radius:5px;background:light-dark(#F0F5EF,#26382E)}
+.person-verse{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:top;color:light-dark(#4F7A64,#B5D5C0);font-size:12px;margin:0 0 6px;padding:2px 6px;border-radius:5px;background:light-dark(#F0F5EF,#26382E)}
 .person-verse.empty{display:none}
 .muted{color:light-dark(#6B776F,#A7B4AB);font-size:12px}
 .track{height:7px;background:light-dark(#E9EDE8,#39473F);border-radius:99px;overflow:hidden}
@@ -145,8 +145,10 @@ function renderPeople() {
  };
  peopleRoot.innerHTML = people.map(p => {
   const count = doneCount(p), pct = Math.round(count / 20 * 100);
-  const latest = Object.keys(notes[p]).filter(week => notes[p][week] && notes[p][week].trim()).sort((a,b) => (noteUpdated[p][b] || "").localeCompare(noteUpdated[p][a] || ""))[0];
-  const latestText = latest ? notes[p][latest].trim().replace(/\\s+/g," ") : "";
+  const latestWeek = Object.keys(notes[p])
+   .filter(week => notes[p][week] && notes[p][week].trim())
+   .sort((a,b) => (noteUpdated[p][b] || "").localeCompare(noteUpdated[p][a] || ""))[0];
+  const latestText = latestWeek ? notes[p][latestWeek].trim().replace(/\\s+/g," ") : "";
   return `<div class="person"><div class="avatar"><img class="${p === "은경" ? "kuromi-avatar" : p === "주연" ? "melody-avatar" : ""}" src="${avatarImages[p]}" alt="${p}의 캐릭터"></div><div class="person-main"><div class="person-line"><strong>${p}</strong><span class="muted">${count}/20주 · ${pct}%</span></div><div class="person-verse ${latestText ? "" : "empty"}" title="${escapeHtml(latestText)}">${escapeHtml(latestText)}</div><div class="track"><div class="fill" style="width:${pct}%"></div></div></div></div>`;
  }).join("");
 }
@@ -165,6 +167,7 @@ function renderWeeks() {
   const weekNumber = Number(e.target.dataset.noteWeek);
   const value = e.target.value;
   notes[p][weekNumber] = value;
+  renderPeople();
   const status = weekRoot.querySelector(`[data-note-status="${weekNumber}"]`);
   if (!supabase) { if (status) status.textContent = "온라인 저장 연결 필요"; return; }
   if (status) status.textContent = "저장 중…";
@@ -174,6 +177,7 @@ function renderWeeks() {
    const personId = personalLinks.find(person => person.name === p).id;
    const { error } = await supabase.from("reading_progress").upsert({person_id:personId,week_number:weekNumber,completed:state[p][weekNumber] === true,verse_note:value || null,updated_at:new Date().toISOString()}, {onConflict:"person_id,week_number"});
    if (status) status.textContent = error ? "저장 실패 · 다시 시도해 주세요" : "자동 저장됨";
+   if (!error) { noteUpdated[p][weekNumber] = new Date().toISOString(); renderPeople(); }
    if (error) { console.error(error); setStatus("메모를 저장하지 못했어요. Supabase의 verse_note 컬럼을 확인해 주세요."); }
   }, 700);
   });
